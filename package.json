@@ -1,0 +1,11 @@
+{
+  "name": "saju-pdf-server",
+  "version": "1.0.0",
+  "private": true,
+  "description": "운명마스터 - 사주 해설서 PDF 생성 서버 (Puppeteer 기반, Vercel 서버리스)",
+  "dependencies": {
+    "puppeteer-core": "^23.0.0",
+    "@sparticuz/chromium": "^127.0.0",
+    "marked": "^12.0.0"
+  }
+}
