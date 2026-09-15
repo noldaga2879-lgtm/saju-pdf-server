@@ -27,13 +27,14 @@
 //
 // 응답: application/pdf 바이너리
 
+const path = require('path');
 const { buildReportHTML } = require('../lib/reportTemplate');
 
 // Vercel 서버리스 환경에서는 puppeteer-core + @sparticuz/chromium 조합을 씁니다.
 // (일반 puppeteer 패키지는 크로미움 전체를 포함해서 서버리스 배포 용량 제한에 걸립니다.)
 const chromium = require('@sparticuz/chromium');
 const puppeteer = require('puppeteer-core');
-     chromium.setGraphicsMode = false;
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'POST 요청만 지원합니다.' });
@@ -57,10 +58,16 @@ module.exports = async (req, res) => {
   try {
     const html = buildReportHTML(data);
 
+    const executablePath = await chromium.executablePath();
+    // libnss3.so 등 공유 라이브러리를 크로미움 실행파일과 같은 폴더에서 찾도록
+    // 명시적으로 지정합니다 (이게 없으면 파일은 있어도 못 찾는 경우가 흔합니다).
+    process.env.LD_LIBRARY_PATH = [path.dirname(executablePath), process.env.LD_LIBRARY_PATH || '']
+      .filter(Boolean).join(':');
+
     browser = await puppeteer.launch({
       args: chromium.args,
       defaultViewport: chromium.defaultViewport,
-      executablePath: await chromium.executablePath(),
+      executablePath: executablePath,
       headless: chromium.headless
     });
 
