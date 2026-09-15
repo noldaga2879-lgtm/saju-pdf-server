@@ -33,7 +33,7 @@ const { buildReportHTML } = require('../lib/reportTemplate');
 // (일반 puppeteer 패키지는 크로미움 전체를 포함해서 서버리스 배포 용량 제한에 걸립니다.)
 const chromium = require('@sparticuz/chromium');
 const puppeteer = require('puppeteer-core');
-
+     chromium.setGraphicsMode = false;
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'POST 요청만 지원합니다.' });
