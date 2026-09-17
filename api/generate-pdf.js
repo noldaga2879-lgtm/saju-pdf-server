@@ -72,10 +72,9 @@ module.exports = async (req, res) => {
         use_print: false,
         // 여백은 HTML의 @page CSS(상하 13mm, 좌우 15mm)에서 이미 지정했으므로
         // PDFShift 자체 margin은 0으로 둬서 중복 적용을 막습니다.
-        margin: '0'
+        margin: '0',
        delay: 3000
-    })  
-      })
+     })
     });
 
     if (!response.ok) {
